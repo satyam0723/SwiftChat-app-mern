@@ -25,7 +25,7 @@ export const SocketProvider = ({ children }) => {
       });
 
       const handleReceiveMessage = (message) => {
-        console.log("hi debug");
+        // console.log("hi debug");
         const { selectedChatData, selectedChatType, addMessage } =
           useAppStore.getState();
         if (
