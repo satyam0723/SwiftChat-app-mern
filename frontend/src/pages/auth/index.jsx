@@ -46,12 +46,14 @@ const Auth = () => {
   };
 
   const handleLogin = async () => {
-    if (validateLogin()) {
+    if (!validateLogin()) return;
+    try {
       const response = await apiClient.post(
         LOGIN_ROUTE,
         { email, password },
         { withCredentials: true }
       );
+
       if (response.data.user.id) {
         setUserInfo(response.data.user);
         if (response.data.user.profileSetup) {
@@ -61,8 +63,12 @@ const Auth = () => {
         }
       }
       console.log(response);
+    } catch (err) {
+      console.error("Login error:", err.response?.data || err.message);
+      toast.error(err.response?.data || "Something went wrong");
     }
   };
+
   const handleSignup = async () => {
     if (validateSignUp()) {
       const response = await apiClient.post(
@@ -111,14 +117,14 @@ const Auth = () => {
                   placeholder="Email"
                   type="email"
                   className="rounded-full p-6"
-                  vlaue={email}
+                  value={email}
                   onChange={(e) => setEmail(e.target.value)}
                 />
                 <Input
                   placeholder="Password"
                   type="password"
                   className="rounded-full p-6"
-                  vlaue={password}
+                  value={password}
                   onChange={(e) => setPassword(e.target.value)}
                 />
                 <Button className="rounded-full p-6" onClick={handleLogin}>
@@ -130,21 +136,21 @@ const Auth = () => {
                   placeholder="Email"
                   type="email"
                   className="rounded-full p-6"
-                  vlaue={email}
+                  value={email}
                   onChange={(e) => setEmail(e.target.value)}
                 />
                 <Input
                   placeholder="Password"
                   type="password"
                   className="rounded-full p-6"
-                  vlaue={password}
+                  value={password}
                   onChange={(e) => setPassword(e.target.value)}
                 />
                 <Input
                   placeholder="Confirm Password"
                   type="password"
                   className="rounded-full p-6"
-                  vlaue={confirmPassword}
+                  value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
                 />
                 <Button className="rounded-full p-6" onClick={handleSignup}>
