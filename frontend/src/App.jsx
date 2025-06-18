@@ -22,6 +22,26 @@ const AuthRoute = ({ children }) => {
 function App() {
   const { userInfo, setUserInfo } = useAppStore();
   const [loading, setLoading] = useState(true);
+  const [backendAwake, setBackendAwake] = useState(false);
+
+  useEffect(() => {
+    const pingBackend = async () => {
+      try {
+        const res = await fetch(import.meta.env.VITE_SERVER_URL + "/api/ping");
+        if (res.ok) {
+          setBackendAwake(true);
+        } else {
+          throw new Error("Backend not ready");
+        }
+      } catch (err) {
+        console.log("Backend sleeping. Retrying in 3s...");
+        setTimeout(pingBackend, 3000); // retry every 3 seconds
+      }
+    };
+
+    pingBackend();
+  }, []);
+
   useEffect(() => {
     const getUserData = async () => {
       try {
@@ -41,16 +61,38 @@ function App() {
         setLoading(false);
       }
     };
-    if (!userInfo) {
-      getUserData();
-    } else {
-      setLoading(false);
+
+    if (backendAwake) {
+      if (!userInfo) {
+        getUserData();
+      } else {
+        setLoading(false);
+      }
     }
-  }, [userInfo, setUserInfo]);
+  }, [backendAwake, userInfo, setUserInfo]);
+
+  if (!backendAwake) {
+    return (
+      <div className="h-screen w-screen flex flex-col items-center justify-center text-center px-5">
+        <h2 className="text-2xl font-bold">Waking up server...</h2>
+        <p className="mt-2 text-gray-600">
+          This might take 30–60 seconds. Please wait.
+        </p>
+      </div>
+    );
+  }
 
   if (loading) {
-    return <div>Loading...</div>;
+    return (
+      <div className="h-screen w-screen flex items-center justify-center text-xl font-medium">
+        Loading...
+      </div>
+    );
   }
+
+  // if (loading) {
+  //   return <div>Loading...</div>;
+  // }
 
   return (
     <>

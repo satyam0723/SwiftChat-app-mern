@@ -24,6 +24,11 @@ app.use(express.static("public"));
 app.get("/", (req, res) => {
   res.send("Welcome to chat-app API");
 });
+
+app.get("/api/ping", (req, res) => {
+  res.status(200).send("pong");
+});
+
 app.use("/api/auth", authRoutes);
 app.use("/api/contacts", contactRoutes);
 app.use("/api/messages", messagesRoutes);
