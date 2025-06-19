@@ -74,9 +74,23 @@ function App() {
   if (!backendAwake) {
     return (
       <div className="h-screen w-screen flex flex-col items-center justify-center text-center px-5">
-        <h2 className="text-2xl font-bold">Waking up server...</h2>
+        <h2 className="text-2xl font-bold flex items-center justify-center">
+          Waking up server
+          <span className="ml-1 flex">
+            <span className="animate-bounce [animation-delay:-0.3s]">.</span>
+            <span className="animate-bounce [animation-delay:-0.15s]">.</span>
+            <span className="animate-bounce">.</span>
+          </span>
+        </h2>
+
         <p className="mt-2 text-gray-600">
-          This might take 30–60 seconds. Please wait.
+          This may take up to 30 seconds. The page will refresh automatically
+          once the server is ready.
+        </p>
+        <p className="mt-10 text-sm text-gray-500 max-w-md">
+          Note: The backend is hosted on a free-tier service that may
+          temporarily suspend inactive servers to conserve resources. We
+          appreciate your patience.😊
         </p>
       </div>
     );
